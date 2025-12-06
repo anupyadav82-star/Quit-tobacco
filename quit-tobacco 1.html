@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quit Tobacco Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ===== CSS (Design) ===== -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #e5e7eb;
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 24px;
+      padding: 20px 18px 24px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .title {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .chip {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.4);
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      border-radius: 18px;
+      padding: 14px 14px 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(75, 85, 99, 0.6);
+      margin-bottom: 12px;
+    }
+
+    .card.highlight {
+      background: radial-gradient(circle at top left, #22c55e33, #020617);
+      border-color: rgba(74, 222, 128, 0.4);
+    }
+
+    .card-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .big-number {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #22c55e;
+    }
+
+    .big-label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .stat-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .quote {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      margin-bottom: 4px;
+    }
+
+    .quote-meta {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    label {
+      font-size: 0.76rem;
+      color: #d1d5db;
+    }
+
+    input {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 10px;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.2);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 8px 18px rgba(22, 163, 74, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.4);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      border: 1px solid rgba(75, 85, 99, 0.8);
+      box-shadow: none;
+    }
+
+    .btn-ghost:active {
+      transform: translateY(1px);
+    }
+
+    .danger {
+      color: #f97373;
+      border-color: rgba(248, 113, 113, 0.6);
+    }
+
+    .footer {
+      margin-top: 8px;
+      font-size: 0.68rem;
+      text-align: center;
+      color: #6b7280;
+    }
+
+    .tagline {
+      font-size: 0.7rem;
+      margin-top: 2px;
+      color: #9ca3af;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.7rem;
+      color: #e5e7eb;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .warning {
+      font-size: 0.7rem;
+      color: #facc15;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 400px) {
+      .app {
+        padding: 16px 12px 18px;
+      }
+
+      .big-number {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div>
+        <div class="title">Quit Tobacco Tracker</div>
+        <div class="tagline">One clean minute → one clean life.</div>
+      </div>
+      <div class="chip">Day 1 भी जीत है 💪</div>
+    </div>
+
+    <div class="card highlight" id="streakCard">
+      <div class="card-title">Current streak</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:8px;">
+        <div>
+          <div class="big-number" id="daysClean">0</div>
+          <div class="big-label">days tobacco-free</div>
+        </div>
+        <div class="grid-3" style="flex:1;">
+          <div>
+            <div class="stat-label">Hours</div>
+            <div class="stat-value" id="hoursClean">0</div>
+          </div>
+          <div>
+            <div class="stat-label">Minutes</div>
+            <div class="stat-value" id="minsClean">0</div>
+          </div>
+          <div>
+            <div class="stat-label">Since</div>
+            <div class="stat-value" id="sinceDate">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-3" style="margin-top:10px;">
+        <div>
+          <div class="stat-label">Money saved</div>
+          <div class="stat-value" id="moneySaved">₹0</div>
+        </div>
+        <div>
+          <div class="stat-label">Cigs / packs avoided*</div>
+          <div class="stat-value" id="unitsAvoided">0</div>
+        </div>
+        <div>
+          <div class="stat-label">Best streak</div>
+          <div class="stat-value" id="bestStreak">0 d</div>
+        </div>
+      </div>
+      <div class="warning">*Gutkha / cigarette / any tobacco unit per day basis.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Motivation</div>
+      <div class="quote" id="quoteText">
+        Har clean minute tumhari body ko repair kar raha hai.
+      </div>
+      <div class="quote-meta" id="quoteMeta">Tap “New line” for another boost.</div>
+      <div class="btn-row" style="margin-top:8px;">
+        <button class="btn btn-ghost" id="btnNewQuote">New line</button>
+        <button class="btn btn-ghost" id="btnSmallWin">+ 1 urge defeated</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Your plan</div>
+      <div class="form-row">
+        <label for="quitDateInput">Quit date & time</label>
+        <input type="datetime-local" id="quitDateInput" />
+      </div>
+
+      <div class="form-row">
+        <label for="costPerDayInput">Average spend per day on tobacco (₹)</label>
+        <input type="number" id="costPerDayInput" min="0" step="1" placeholder="e.g. 80" />
+      </div>
+
+      <div class="form-row">
+        <label for="unitsPerDayInput">Average units per day (gutkha / cig / pack)</label>
+        <input type="number" id="unitsPerDayInput" min="0" step="1" placeholder="e.g. 10" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnSavePlan">Save / Update plan</button>
+        <button class="btn btn-ghost danger" id="btnRelapse">I slipped today (reset)</button>
+      </div>
+      <div style="margin-top:6px;">
+        <span class="pill">
+          <span class="pill-dot"></span>
+          Data auto-save hota hai (local device only)
+        </span>
+      </div>
+    </div>
+
+    <div class="footer">
+      This app is not medical advice. Talk to a doctor for full support.
+    </div>
+  </div>
+
+  <!-- ===== JavaScript (Logic) ===== -->
+  <script>
+    // LocalStorage keys
+    const STORAGE_KEYS = {
+      quitDate: "qt_quit_date_iso",
+      costPerDay: "qt_cost_per_day",
+      unitsPerDay: "qt_units_per_day",
+      bestStreakDays: "qt_best_streak_days",
+      urgesDefeated: "qt_urges_defeated",
+    };
+
+    // DOM elements
+    const daysCleanEl = document.getElementById("daysClean");
+    const hoursCleanEl = document.getElementById("hoursClean");
+    const minsCleanEl = document.getElementById("minsClean");
+    const sinceDateEl = document.getElementById("sinceDate");
+    const moneySavedEl = document.getElementById("moneySaved");
+    const unitsAvoidedEl = document.getElementById("unitsAvoided");
+    const bestStreakEl = document.getElementById("bestStreak");
+
+    const quitDateInput = document.getElementById("quitDateInput");
+    const costPerDayInput = document.getElementById("costPerDayInput");
+    const unitsPerDayInput = document.getElementById("unitsPerDayInput");
+
+    const quoteTextEl = document.getElementById("quoteText");
+    const quoteMetaEl = document.getElementById("quoteMeta");
+
+    const btnSavePlan = document.getElementById("btnSavePlan");
+    const btnRelapse = document.getElementById("btnRelapse");
+    const btnNewQuote = document.getElementById("btnNewQuote");
+    const btnSmallWin = document.getElementById("btnSmallWin");
+
+    const quotes = [
+      "Aaj ka ‘no’ kal ki badi jeet hai.",
+      "Craving wave ki tarah aati hai — ruk jao, ye khud hi toot jayegi.",
+      "Tum cigarette/gutkha nahi chhod rahe, tum apni azadi wapas le rahe ho.",
+      "Tobacco se door har din tumhara BP, heart, lungs ka shukriya bol raha hai.",
+      "Bas aaj ke liye quit. Kal ka kal dekhenge.",
+      "Har baar jab tum ‘no’ bolte ho, tumhara willpower strong ho raha hai.",
+      "Tobacco meri problem solve nahi karta, sirf nayi problems deta hai.",
+      "Main control mein hoon, tobacco nahi.",
+      "1 saans bina tobacco ke = zyada zinda, zyada azaad.",
+      "Mujhe relief nahi, mujhe real freedom chahiye.",
+    ];
+
+    function getRandomQuote() {
+      const index = Math.floor(Math.random() * quotes.length);
+      return quotes[index];
+    }
+
+    function formatDateForDisplay(date) {
+      if (!date) return "—";
+      const d = new Date(date);
+      if (isNaN(d.getTime())) return "—";
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const year = d.getFullYear();
+      const hours = String(d.getHours()).padStart(2, "0");
+      const mins = String(d.getMinutes()).padStart(2, "0");
+      return `${day}/${month}/${year} ${hours}:${mins}`;
+    }
+
+    function loadData() {
+      const quitDateISO = localStorage.getItem(STORAGE_KEYS.quitDate);
+      const costPerDay = localStorage.getItem(STORAGE_KEYS.costPerDay);
+      const unitsPerDay = localStorage.getItem(STORAGE_KEYS.unitsPerDay);
+      const bestStreakDays =
+        parseInt(localStorage.getItem(STORAGE_KEYS.bestStreakDays) || "0", 10);
+
+      if (quitDateISO) {
+        // Set input value if still valid datetime-local format
+        quitDateInput.value = quitDateISO.slice(0, 16);
+      }
+      if (costPerDay) {
+        costPerDayInput.value = costPerDay;
+      }
+      if (unitsPerDay) {
+        unitsPerDayInput.value = unitsPerDay;
+      }
+
+      bestStreakEl.textContent = bestStreakDays + " d";
+
+      const urgesDefeated =
+        parseInt(localStorage.getItem(STORAGE_KEYS.urgesDefeated) || "0", 10);
+      quoteMetaEl.textContent =
+        "Urges defeated: " + urgesDefeated + " • Tap “New line” for another boost.";
+
+      return {
+        quitDateISO,
+        costPerDay: parseFloat(costPerDay || "0"),
+        unitsPerDay: parseFloat(unitsPerDay || "0"),
+        bestStreakDays,
+      };
+    }
+
+    function savePlan() {
+      const quitVal = quitDateInput.value;
+      const costVal = costPerDayInput.value;
+      const unitsVal = unitsPerDayInput.value;
+
+      if (!quitVal) {
+        alert("Quit date/time fill karo (ye sabse important hai).");
+        return;
+      }
+
+      localStorage.setItem(STORAGE_KEYS.quitDate, quitVal);
+      localStorage.setItem(STORAGE_KEYS.costPerDay, costVal || "0");
+      localStorage.setItem(STORAGE_KEYS.unitsPerDay, unitsVal || "0");
+
+      alert("Plan saved! Ab app automatically streak calculate karega.");
+      updateUI();
+    }
+
+    function handleRelapse() {
+      const ok = confirm(
+        "Koi baat nahi, slip ho gaya. Reset karein aur abhi se naya streak shuru karein?"
+      );
+      if (!ok) return;
+
+      const prevData = loadData();
+
+      // Calculate old streak (agar quit date tha)
+      if (prevData.quitDateISO) {
+        const now = new Date();
+        const oldQuit = new Date(prevData.quitDateISO);
+        const diffMs = now - oldQuit;
+        const days = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+
+        if (days > prevData.bestStreakDays) {
+          localStorage.setItem(
+            STORAGE_KEYS.bestStreakDays,
+            String(days)
+          );
+        }
+      }
+
+      // New quit date = abhi
+      const nowISO = new Date().toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+      quitDateInput.value = nowISO;
+      localStorage.setItem(STORAGE_KEYS.quitDate, nowISO);
+
+      alert("New streak started. Slip se zyada important comeback hota hai. 🔁");
+      updateUI();
+    }
+
+    function calculateStats() {
+      const { quitDateISO, costPerDay, unitsPerDay, bestStreakDays } = loadData();
+
+      if (!quitDateISO) {
+        // No plan yet
+        daysCleanEl.textContent = "0";
+        hoursCleanEl.textContent = "0";
+        minsCleanEl.textContent = "0";
+        sinceDateEl.textContent = "Set your quit date";
+        moneySavedEl.textContent = "₹0";
+        unitsAvoidedEl.textContent = "0";
+        return;
+      }
+
+      const quitDate = new Date(quitDateISO);
+      const now = new Date();
+
+      if (isNaN(quitDate.getTime()) || quitDate > now) {
+        daysCleanEl.textContent = "0";
+        hoursCleanEl.textContent = "0";
+        minsCleanEl.textContent = "0";
+        sinceDateEl.textContent = "Invalid date";
+        moneySavedEl.textContent = "₹0";
+        unitsAvoidedEl.textContent = "0";
+        return;
+      }
+
+      const diffMs = now - quitDate;
+      let totalMinutes = Math.floor(diffMs / (1000 * 60));
+      let totalHours = Math.floor(totalMinutes / 60);
+      let totalDays = Math.floor(totalHours / 24);
+
+      const remainingHours = totalHours % 24;
+      const remainingMinutes = totalMinutes % 60;
+
+      daysCleanEl.textContent = String(totalDays);
+      hoursCleanEl.textContent = String(remainingHours);
+      minsCleanEl.textContent = String(remainingMinutes);
+      sinceDateEl.textContent = formatDateForDisplay(quitDate);
+
+      // Money saved (approx)
+      const daysFraction = diffMs / (1000 * 60 * 60 * 24);
+      const moneySaved = Math.round(daysFraction * (costPerDay || 0));
+      moneySavedEl.textContent = "₹" + moneySaved;
+
+      // Units avoided
+      const unitsSaved = Math.round(daysFraction * (unitsPerDay || 0));
+      unitsAvoidedEl.textContent = String(unitsSaved);
+
+      // Best streak
+      const effectiveBest = Math.max(bestStreakDays, totalDays);
+      bestStreakEl.textContent = effectiveBest + " d";
+    }
+
+    function updateUI() {
+      calculateStats();
+    }
+
+    function initQuotes() {
+      quoteTextEl.textContent = getRandomQuote();
+    }
+
+    // Event listeners
+    btnSavePlan.addEventListener("click", savePlan);
+    btnRelapse.addEventListener("click", handleRelapse);
+
+    btnNewQuote.addEventListener("click", () => {
+      quoteTextEl.textContent = getRandomQuote();
+    });
+
+    btnSmallWin.addEventListener("click", () => {
+      const current =
+        parseInt(
+          localStorage.getItem(STORAGE_KEYS.urgesDefeated) || "0",
+          10
+        ) + 1;
+      localStorage.setItem(
+        STORAGE_KEYS.urgesDefeated,
+        String(current)
+      );
+      quoteMetaEl.textContent =
+        "Urges defeated: " +
+        current +
+        " • Tumhara dimaag har baar zyada strong ho raha hai.";
+    });
+
+    // Init on load
+    document.addEventListener("DOMContentLoaded", () => {
+      loadData();
+      updateUI();
+      initQuotes();
+      // Auto-update every 30 seconds
+      setInterval(updateUI, 30000);
+    });
+  </script>
+</body>
+</html>
